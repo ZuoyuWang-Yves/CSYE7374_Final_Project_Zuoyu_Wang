@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Incident Triage UI</title>
+    <style>
+        :root {
+            --paper: #f5efe3;
+            --ink: #1f2a2c;
+            --panel: rgba(255, 250, 242, 0.92);
+            --accent: #8c3d14;
+            --accent-soft: #d9a066;
+            --edge: rgba(31, 42, 44, 0.12);
+            --critical: #a12525;
+            --high: #d2681d;
+            --medium: #cf9a1b;
+            --low: #3f7c4f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+            color: var(--ink);
+            background:
+                    radial-gradient(circle at top left, rgba(217, 160, 102, 0.32), transparent 28rem),
+                    linear-gradient(135deg, #f0e4d0, #f7f2ea 50%, #e9dcc7);
+        }
+
+        .shell {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2rem, 4vw, 3.1rem);
+            letter-spacing: 0.02em;
+        }
+
+        .hero p {
+            margin: 6px 0 0;
+            max-width: 760px;
+            color: rgba(31, 42, 44, 0.78);
+        }
+
+        .pill-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: var(--panel);
+            border: 1px solid var(--edge);
+            font-size: 0.92rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 18px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--edge);
+            border-radius: 22px;
+            box-shadow: 0 18px 45px rgba(59, 39, 22, 0.08);
+            padding: 18px;
+            backdrop-filter: blur(6px);
+        }
+
+        .panel h2, .panel h3 {
+            margin-top: 0;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        form {
+            display: grid;
+            gap: 12px;
+        }
+
+        label {
+            display: grid;
+            gap: 6px;
+            font-size: 0.92rem;
+        }
+
+        input, select, textarea, button {
+            font: inherit;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            border: 1px solid rgba(31, 42, 44, 0.18);
+            border-radius: 14px;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.82);
+            color: var(--ink);
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        button {
+            border: 0;
+            border-radius: 14px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, var(--accent), #a9511b);
+            color: #fffaf3;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, #415a63, #5c7580);
+        }
+
+        .main-column {
+            display: grid;
+            gap: 18px;
+        }
+
+        .incident-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 18px;
+        }
+
+        .incident-list {
+            display: grid;
+            gap: 10px;
+            max-height: 780px;
+            overflow: auto;
+        }
+
+        .incident-card {
+            padding: 14px;
+            border-radius: 18px;
+            border: 1px solid var(--edge);
+            background: rgba(255, 255, 255, 0.72);
+            cursor: pointer;
+            transition: transform 120ms ease, border-color 120ms ease;
+        }
+
+        .incident-card:hover, .incident-card.active {
+            transform: translateY(-1px);
+            border-color: rgba(140, 61, 20, 0.45);
+        }
+
+        .incident-card .title {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .status-tag, .severity-tag {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .status-processing {
+            background: rgba(207, 154, 27, 0.16);
+            color: #7d5d06;
+        }
+
+        .status-completed {
+            background: rgba(63, 124, 79, 0.16);
+            color: #21562d;
+        }
+
+        .severity-CRITICAL { background: rgba(161, 37, 37, 0.14); color: var(--critical); }
+        .severity-HIGH { background: rgba(210, 104, 29, 0.14); color: var(--high); }
+        .severity-MEDIUM { background: rgba(207, 154, 27, 0.16); color: #8a6507; }
+        .severity-LOW { background: rgba(63, 124, 79, 0.16); color: var(--low); }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .detail-box {
+            padding: 12px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.68);
+            border: 1px solid var(--edge);
+        }
+
+        .trace-list {
+            display: grid;
+            gap: 10px;
+            max-height: 420px;
+            overflow: auto;
+        }
+
+        .trace-item {
+            padding: 12px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--edge);
+        }
+
+        .trace-item strong {
+            color: var(--accent);
+        }
+
+        .trace-time {
+            font-size: 0.85rem;
+            color: rgba(31, 42, 44, 0.72);
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0;
+            font-family: "Courier New", monospace;
+            font-size: 0.84rem;
+        }
+
+        .question-answer {
+            min-height: 100px;
+            padding: 14px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--edge);
+        }
+
+        @media (max-width: 980px) {
+            .grid, .incident-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="shell">
+    <div class="hero">
+        <div>
+            <h1>Medical Incident Triage Console</h1>
+            <p>Submit incidents, inspect actor traces, and ask questions about the selected case. This page is intentionally small and local so the backend workflow stays the main focus.</p>
+        </div>
+        <div class="pill-row">
+            <div class="pill" id="mode-pill">Loading mode...</div>
+            <div class="pill" id="trace-pill">Loading trace file...</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="panel">
+            <h2>Submit Incident</h2>
+            <form id="incident-form">
+                <label>Event ID
+                    <input id="eventId" placeholder="Leave blank to auto-generate">
+                </label>
+                <label>System
+                    <input id="system" value="VitalsMonitor" required>
+                </label>
+                <label>Event Type
+                    <input id="eventType" value="oxygen_drop" required>
+                </label>
+                <label>Severity
+                    <select id="severity">
+                        <option>low</option>
+                        <option>medium</option>
+                        <option selected>high</option>
+                        <option>critical</option>
+                    </select>
+                </label>
+                <label>Details
+                    <textarea id="details" required>SpO2 &lt; 88% for 40s</textarea>
+                </label>
+                <label>Analyst Note (Optional)
+                    <textarea id="analystNote" placeholder="Extra human context to be merged into the incident details for the LLM prompt."></textarea>
+                </label>
+                <button type="submit">Submit Incident</button>
+            </form>
+        </div>
+
+        <div class="main-column">
+            <div class="panel incident-layout">
+                <div>
+                    <h2>Incidents</h2>
+                    <div class="incident-list" id="incident-list"></div>
+                </div>
+
+                <div>
+                    <h2 id="selected-title">Select an incident</h2>
+                    <div class="detail-grid" id="detail-grid"></div>
+                    <h3>Trace Timeline</h3>
+                    <div class="trace-list" id="trace-list"></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Ask About Selected Incident</h2>
+                <form id="question-form">
+                    <label>Question
+                        <textarea id="question" placeholder="Why was this escalated? What did the LLM recommend? Which policies were applied?"></textarea>
+                    </label>
+                    <button type="submit" class="secondary">Ask Question</button>
+                </form>
+                <div class="question-answer" id="question-answer">No question asked yet.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedEventId = null;
+    let incidents = [];
+
+    async function fetchJson(url, options) {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || `Request failed: ${response.status}`);
+        }
+        return response.json();
+    }
+
+    async function loadMeta() {
+        const meta = await fetchJson('/api/meta');
+        document.getElementById('mode-pill').textContent = `Runtime: ${meta.applicationMode} | LLM: ${meta.llmMode}`;
+        document.getElementById('trace-pill').textContent = `Trace file: ${meta.traceFile}`;
+    }
+
+    async function loadIncidents() {
+        incidents = await fetchJson('/api/incidents');
+        renderIncidentList();
+
+        if (!selectedEventId && incidents.length > 0) {
+            selectedEventId = incidents[0].eventId;
+        }
+
+        if (selectedEventId) {
+            await loadSelectedIncident();
+        }
+    }
+
+    function renderIncidentList() {
+        const list = document.getElementById('incident-list');
+        list.innerHTML = '';
+
+        if (incidents.length === 0) {
+            list.innerHTML = '<div class="incident-card">No incidents yet.</div>';
+            return;
+        }
+
+        incidents.forEach(incident => {
+            const card = document.createElement('div');
+            card.className = `incident-card ${selectedEventId === incident.eventId ? 'active' : ''}`;
+            card.innerHTML = `
+                <div class="title">
+                    <span>${incident.eventId}</span>
+                    <span class="status-tag status-${incident.status}">${incident.status}</span>
+                </div>
+                <div>${incident.eventType}</div>
+                <div style="margin-top: 8px;">
+                    <span class="severity-tag severity-${(incident.finalSeverity || incident.inputSeverity || '').toUpperCase()}">
+                        ${(incident.finalSeverity || incident.inputSeverity || '').toUpperCase()}
+                    </span>
+                </div>
+            `;
+            card.addEventListener('click', async () => {
+                selectedEventId = incident.eventId;
+                renderIncidentList();
+                await loadSelectedIncident();
+            });
+            list.appendChild(card);
+        });
+    }
+
+    async function loadSelectedIncident() {
+        if (!selectedEventId) {
+            return;
+        }
+
+        const incidentResponse = await fetchJson(`/api/incidents/${selectedEventId}`);
+        const trace = await fetchJson(`/api/traces/${selectedEventId}`);
+
+        renderSelectedIncident(incidentResponse, trace);
+    }
+
+    function renderSelectedIncident(incidentResponse, trace) {
+        document.getElementById('selected-title').textContent = `Incident ${selectedEventId}`;
+
+        const detailGrid = document.getElementById('detail-grid');
+        const traceList = document.getElementById('trace-list');
+
+        detailGrid.innerHTML = '';
+        traceList.innerHTML = '';
+
+        const statusBox = document.createElement('div');
+        statusBox.className = 'detail-box';
+        statusBox.innerHTML = `<strong>Status</strong><div>${incidentResponse.status}</div>`;
+        detailGrid.appendChild(statusBox);
+
+        if (incidentResponse.status === 'completed') {
+            const result = incidentResponse.result;
+            const escalationTarget = formatEscalationTarget(result.escalationResult.target);
+            [
+                ['System', result.incident.system],
+                ['Event Type', result.incident.eventType],
+                ['Input Severity', result.incident.severity],
+                ['Final Severity', result.finalDecision.finalSeverity],
+                ['Final Action', result.finalDecision.finalAction],
+                ['Escalation', escalationTarget],
+                ['LLM Accepted', String(result.finalDecision.llmAccepted)],
+                ['Policies', result.policyResult.appliedPolicies.join(', ') || 'None']
+            ].forEach(([label, value]) => {
+                const box = document.createElement('div');
+                box.className = 'detail-box';
+                box.innerHTML = `<strong>${label}</strong><div>${value}</div>`;
+                detailGrid.appendChild(box);
+            });
+
+            const reasonBox = document.createElement('div');
+            reasonBox.className = 'detail-box';
+            reasonBox.style.gridColumn = '1 / -1';
+            reasonBox.innerHTML = `<strong>Decision Reason</strong><pre>${result.finalDecision.reason}</pre>`;
+            detailGrid.appendChild(reasonBox);
+
+            const llmBox = document.createElement('div');
+            llmBox.className = 'detail-box';
+            llmBox.style.gridColumn = '1 / -1';
+            llmBox.innerHTML = `<strong>LLM Analysis</strong><pre>${result.llmAnalysis.analysis}\n\nRecommended action: ${result.llmAnalysis.recommendedAction}\nConfidence: ${result.llmAnalysis.confidence}</pre>`;
+            detailGrid.appendChild(llmBox);
+        } else {
+            const pending = incidentResponse.incident;
+            [
+                ['System', pending.system],
+                ['Event Type', pending.eventType],
+                ['Input Severity', pending.severity]
+            ].forEach(([label, value]) => {
+                const box = document.createElement('div');
+                box.className = 'detail-box';
+                box.innerHTML = `<strong>${label}</strong><div>${value}</div>`;
+                detailGrid.appendChild(box);
+            });
+        }
+
+        if (trace.length === 0) {
+            traceList.innerHTML = '<div class="trace-item">No trace entries yet.</div>';
+            return;
+        }
+
+        trace.forEach(entry => {
+            const item = document.createElement('div');
+            item.className = 'trace-item';
+            item.innerHTML = `
+                <div class="trace-time">${entry.timestampEastern}</div>
+                <div><strong>${entry.action}</strong></div>
+                <div>${entry.actorName}</div>
+                <pre>${JSON.stringify(entry.details, null, 2)}</pre>
+            `;
+            traceList.appendChild(item);
+        });
+    }
+
+    function formatEscalationTarget(target) {
+        if (!target) {
+            return '';
+        }
+        return target.replaceAll('_', ' ').toLowerCase().replace(/\b\w/g, character => character.toUpperCase());
+    }
+
+    document.getElementById('incident-form').addEventListener('submit', async event => {
+        event.preventDefault();
+
+        const payload = {
+            eventId: document.getElementById('eventId').value,
+            system: document.getElementById('system').value,
+            eventType: document.getElementById('eventType').value,
+            severity: document.getElementById('severity').value,
+            details: document.getElementById('details').value,
+            analystNote: document.getElementById('analystNote').value
+        };
+
+        const response = await fetchJson('/api/incidents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        selectedEventId = response.eventId;
+        document.getElementById('eventId').value = '';
+        document.getElementById('analystNote').value = '';
+        document.getElementById('question-answer').textContent = `Submitted ${response.eventId}. Waiting for processing...`;
+        await loadIncidents();
+    });
+
+    document.getElementById('question-form').addEventListener('submit', async event => {
+        event.preventDefault();
+
+        if (!selectedEventId) {
+            document.getElementById('question-answer').textContent = 'Select an incident first.';
+            return;
+        }
+
+        const question = document.getElementById('question').value.trim();
+        if (!question) {
+            document.getElementById('question-answer').textContent = 'Type a question first.';
+            return;
+        }
+
+        try {
+            const answer = await fetchJson('/api/questions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    eventId: selectedEventId,
+                    question
+                })
+            });
+
+            document.getElementById('question-answer').textContent = `[${answer.llmMode}] ${answer.answer}`;
+        } catch (error) {
+            document.getElementById('question-answer').textContent = error.message;
+        }
+    });
+
+    async function refreshLoop() {
+        try {
+            await loadIncidents();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function boot() {
+        await loadMeta();
+        await refreshLoop();
+        setInterval(refreshLoop, 2000);
+    }
+
+    boot().catch(error => {
+        document.getElementById('question-answer').textContent = error.message;
+    });
+</script>
+</body>
+</html>
