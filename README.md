@@ -79,6 +79,18 @@ The LLM part is behind the `LlmProvider` interface.
 
 The OpenAI mode is optional. You can run the project fully in mock mode and still get the full actor workflow.
 
+## Two main ways to run it
+
+This project is mainly used in these two modes:
+
+1. Demo mode
+   Uses the mock LLM and runs the built-in sample incidents.
+   This is the simple actor pipeline demo and it does not use the browser UI.
+
+2. Server mode with real API
+   Uses the local browser UI and can call the real OpenAI API.
+   This mode is for submitting incidents from the simple UI and viewing the results there.
+
 ## Project layout
 
 - `src/main/java/org/example/actor`: actor workflow
@@ -127,12 +139,18 @@ Run `org.example.Main` from IntelliJ with one of these argument sets:
 --server --openai --port=8080
 ```
 
+Recommended setup:
+
+- `--demo --mock`: demo batch, mock LLM, no UI
+- `--server --openai --port=8080`: simple UI with real OpenAI calls
+- `--server --mock`: simple UI with mock LLM, useful if you want the UI without using the API
+
 If you use `--openai`, set `OPENAI_API_KEY` first.
 
 ## Output
 
 - Audit log: `logs/audit.jsonl`
-- Local UI: `http://localhost:8080` by default
+- Local UI: `http://localhost:8080` by default in server mode
 
 ## Example incident
 
