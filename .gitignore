@@ -1,16 +1,17 @@
 target/
 logs/
+out/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
+*.log
+.env
+.env.*
+*.local
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/workspace.xml
-.idea/libraries/
+.idea/
 *.iws
 *.iml
 *.ipr
