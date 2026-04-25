@@ -145,7 +145,23 @@ Recommended setup:
 - `--server --openai --port=8080`: simple UI with real OpenAI calls
 - `--server --mock`: simple UI with mock LLM, useful if you want the UI without using the API
 
-If you use `--openai`, set `OPENAI_API_KEY` first.
+If you use `--openai`, these settings are needed:
+
+```text
+LLM_MODE=openai
+APP_MODE=server
+UI_PORT=8080
+OPENAI_API_KEY=your_api_key_here
+```
+
+Optional settings:
+
+```text
+OPENAI_MODEL=gpt-5.1
+OPENAI_RESPONSES_ENDPOINT=https://api.openai.com/v1/responses
+```
+
+If `LLM_MODE=openai` is set but `OPENAI_API_KEY` is missing or blank, the app will stop during startup and the website will not stay up.
 
 ## Output
 
