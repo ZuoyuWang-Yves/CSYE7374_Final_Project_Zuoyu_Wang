@@ -14,11 +14,20 @@ import org.example.service.EscalationRules;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This actor decides who the final result should be escalated to.
+ */
 public class EscalationActor extends AbstractBehavior<EscalationActor.Command> {
 
+    /**
+     * Every message sent to EscalationActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive a final decision and route it.
+     */
     public record RouteDecision(
             FinalDecision finalDecision,
             ActorRef<EscalationResult> replyTo

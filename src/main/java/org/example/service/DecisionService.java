@@ -7,6 +7,9 @@ import org.example.model.PolicyResult;
 import org.example.model.RiskResult;
 import org.example.model.Severity;
 
+/**
+ * Small service that builds the final decision from the rule results.
+ */
 public class DecisionService {
 
     public FinalDecision decide(RiskResult riskResult, PolicyResult policyResult, LlmAnalysis llmAnalysis) {

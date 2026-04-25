@@ -4,6 +4,9 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+/**
+ * Stores one audit log entry.
+ */
 public record AuditEvent(
         Instant timestamp,
         ZonedDateTime timestampEastern,

@@ -4,6 +4,9 @@ import org.example.model.NormalizedIncident;
 import org.example.model.RiskResult;
 import org.example.model.Severity;
 
+/**
+ * Holds the rule-based risk logic for incident types and severity.
+ */
 public class RiskRules {
 
     public RiskResult analyze(NormalizedIncident incident) {

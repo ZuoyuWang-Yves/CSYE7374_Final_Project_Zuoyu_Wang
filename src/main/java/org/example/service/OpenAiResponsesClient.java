@@ -12,6 +12,9 @@ import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Small client for calling the OpenAI Responses API.
+ */
 public class OpenAiResponsesClient {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();

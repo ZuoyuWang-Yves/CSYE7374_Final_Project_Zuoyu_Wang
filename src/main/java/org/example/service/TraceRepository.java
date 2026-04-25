@@ -17,6 +17,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Reads audit events back from the JSONL log file.
+ */
 public class TraceRepository {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()

@@ -9,6 +9,9 @@ import org.example.model.LlmAnalysis;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Real provider that asks OpenAI for structured analysis.
+ */
 public class OpenAiLlmProvider implements LlmProvider {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()

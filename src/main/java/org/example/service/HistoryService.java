@@ -6,6 +6,9 @@ import org.example.model.NormalizedIncident;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Keeps a small in-memory history so repeated failures can be detected.
+ */
 public class HistoryService {
 
     private final Map<String, Integer> incidentCountsByType = new HashMap<>();

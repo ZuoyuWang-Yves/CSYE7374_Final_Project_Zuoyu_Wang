@@ -4,6 +4,9 @@ import org.example.model.IncidentContext;
 import org.example.model.LlmAnalysis;
 import org.example.model.Severity;
 
+/**
+ * Mock provider used for demos and tests.
+ */
 public class MockLlmProvider implements LlmProvider {
 
     @Override

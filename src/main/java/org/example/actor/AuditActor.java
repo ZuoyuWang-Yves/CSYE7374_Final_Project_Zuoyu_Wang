@@ -19,6 +19,9 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Map;
 
+/**
+ * This actor writes audit and trace events into the JSONL log.
+ */
 public class AuditActor extends AbstractBehavior<AuditActor.Command> {
 
     public static final String SYSTEM_EVENT_ID = "SYSTEM";
@@ -29,9 +32,15 @@ public class AuditActor extends AbstractBehavior<AuditActor.Command> {
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
+    /**
+     * Every message sent to AuditActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive a fire-and-forget audit write.
+     */
     public record WriteAuditEvent(
             String eventId,
             String actorName,
@@ -40,6 +49,9 @@ public class AuditActor extends AbstractBehavior<AuditActor.Command> {
     ) implements Command {
     }
 
+    /**
+     * This actor can receive a request to create one audit event and reply back.
+     */
     public record CreateAuditEvent(
             String eventId,
             String actorName,

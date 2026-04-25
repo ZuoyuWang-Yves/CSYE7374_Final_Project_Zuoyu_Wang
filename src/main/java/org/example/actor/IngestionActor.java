@@ -9,11 +9,20 @@ import org.example.model.NormalizedIncident;
 import org.example.model.RawIncident;
 import org.example.service.IncidentNormalizer;
 
+/**
+ * This actor validates raw incident input and normalizes it.
+ */
 public class IngestionActor extends AbstractBehavior<IngestionActor.Command> {
 
+    /**
+     * Every message sent to IngestionActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive one raw incident.
+     */
     public record SubmitIncident(RawIncident rawIncident) implements Command {
     }
     private final IncidentNormalizer incidentNormalizer;

@@ -2,6 +2,9 @@ package org.example.service;
 
 import org.example.config.ApplicationConfig;
 
+/**
+ * Creates the right LLM provider based on the app config.
+ */
 public final class LlmProviderFactory {
 
     private LlmProviderFactory() {

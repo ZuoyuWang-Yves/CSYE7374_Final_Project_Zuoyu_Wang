@@ -14,11 +14,20 @@ import org.example.service.RiskRules;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This actor applies the risk rules to one incident.
+ */
 public class RiskActor extends AbstractBehavior<RiskActor.Command> {
 
+    /**
+     * Every message sent to RiskActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive one incident and analyze its risk.
+     */
     public record AnalyzeRisk(
             NormalizedIncident incident,
             ActorRef<RiskResult> replyTo

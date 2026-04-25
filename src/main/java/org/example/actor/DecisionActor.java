@@ -16,11 +16,20 @@ import org.example.service.DecisionService;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This actor turns the risk, policy, and LLM info into one final decision.
+ */
 public class DecisionActor extends AbstractBehavior<DecisionActor.Command> {
 
+    /**
+     * Every message sent to DecisionActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive everything needed to make the final decision.
+     */
     public record MakeDecision(
             RiskResult riskResult,
             PolicyResult policyResult,

@@ -14,11 +14,20 @@ import org.example.service.LlmProvider;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This actor calls the selected LLM provider and returns one analysis result.
+ */
 public class LLMAnalysisActor extends AbstractBehavior<LLMAnalysisActor.Command> {
 
+    /**
+     * Every message sent to LLMAnalysisActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive the full incident context for LLM analysis.
+     */
     public record AnalyzeIncidentContext(
             IncidentContext context,
             ActorRef<LlmAnalysis> replyTo

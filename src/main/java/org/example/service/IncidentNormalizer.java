@@ -7,6 +7,9 @@ import org.example.model.Severity;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Cleans raw incident input and turns it into a normalized incident.
+ */
 public class IncidentNormalizer {
 
     public NormalizedIncident normalize(RawIncident rawIncident) {

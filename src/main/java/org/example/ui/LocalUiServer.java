@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Small local HTTP server for the browser UI.
+ */
 public class LocalUiServer {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()

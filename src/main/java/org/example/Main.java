@@ -10,6 +10,10 @@ import org.example.ui.LocalUiServer;
 
 import java.nio.file.Path;
 
+/**
+ * Starts the app.
+ * It can run the demo batch or start the local UI server.
+ */
 public class Main {
     public static void main(String[] args) {
         ApplicationConfig config = ApplicationConfig.fromEnvironment(args);

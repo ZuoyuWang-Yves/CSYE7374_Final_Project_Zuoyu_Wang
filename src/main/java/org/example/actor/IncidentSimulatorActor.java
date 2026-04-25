@@ -9,11 +9,20 @@ import org.example.model.RawIncident;
 
 import java.util.List;
 
+/**
+ * This actor sends a batch of sample incidents into the pipeline.
+ */
 public class IncidentSimulatorActor extends AbstractBehavior<IncidentSimulatorActor.Command> {
 
+    /**
+     * Every message sent to IncidentSimulatorActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive a list of demo incidents to submit.
+     */
     public record RunSimulation(List<RawIncident> incidents) implements Command {
     }
 

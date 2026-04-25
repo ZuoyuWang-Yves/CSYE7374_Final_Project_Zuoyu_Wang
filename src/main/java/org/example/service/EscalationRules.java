@@ -5,6 +5,9 @@ import org.example.model.EscalationTarget;
 import org.example.model.FinalDecision;
 import org.example.model.Severity;
 
+/**
+ * Holds the routing rules used by EscalationActor.
+ */
 public class EscalationRules {
 
     public EscalationResult route(FinalDecision finalDecision) {

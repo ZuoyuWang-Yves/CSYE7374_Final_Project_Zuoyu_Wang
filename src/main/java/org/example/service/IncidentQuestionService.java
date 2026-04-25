@@ -7,6 +7,9 @@ import org.example.model.IncidentCaseResult;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Answers follow-up questions about one completed incident.
+ */
 public class IncidentQuestionService {
 
     private final ApplicationConfig config;

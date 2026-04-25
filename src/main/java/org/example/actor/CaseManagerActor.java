@@ -14,14 +14,26 @@ import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This actor opens one case actor for each incident and tracks active cases.
+ */
 public class CaseManagerActor extends AbstractBehavior<CaseManagerActor.Command> {
 
+    /**
+     * Every message sent to CaseManagerActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive a normalized incident and open a case for it.
+     */
     public record OpenCase(NormalizedIncident incident) implements Command {
     }
 
+    /**
+     * This actor can receive a request for the current active case count.
+     */
     public record GetActiveCaseCount(ActorRef<Integer> replyTo) implements Command {
     }
 

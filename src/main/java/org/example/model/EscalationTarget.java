@@ -1,5 +1,8 @@
 package org.example.model;
 
+/**
+ * Lists the possible escalation targets in this project.
+ */
 public enum EscalationTarget {
     NURSE("Nurse"),
     GENERAL_DOCTOR("General Doctor"),

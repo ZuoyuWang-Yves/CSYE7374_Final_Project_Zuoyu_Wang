@@ -21,8 +21,15 @@ import org.example.model.RiskResult;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This actor is the coordinator for one incident case.
+ * It asks the other actors for work and combines the final result.
+ */
 public class IncidentCaseActor extends AbstractBehavior<IncidentCaseActor.Command> {
 
+    /**
+     * This record groups the shared actor refs needed by one case actor.
+     */
     public record Dependencies(
             ActorRef<RiskActor.Command> riskActor,
             ActorRef<HistoryActor.Command> historyActor,
@@ -34,6 +41,9 @@ public class IncidentCaseActor extends AbstractBehavior<IncidentCaseActor.Comman
     ) {
     }
 
+    /**
+     * Every message sent to IncidentCaseActor must implement Command.
+     */
     public interface Command {
     }
 

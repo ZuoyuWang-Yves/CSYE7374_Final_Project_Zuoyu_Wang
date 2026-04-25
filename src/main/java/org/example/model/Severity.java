@@ -1,5 +1,8 @@
 package org.example.model;
 
+/**
+ * Lists the severity levels used in the project.
+ */
 public enum Severity {
     LOW,
     MEDIUM,

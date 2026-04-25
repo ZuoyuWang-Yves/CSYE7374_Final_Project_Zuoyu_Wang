@@ -1,5 +1,8 @@
 package org.example.config;
 
+/**
+ * Small config record for app mode, LLM mode, and server settings.
+ */
 public record ApplicationConfig(
         ApplicationMode applicationMode,
         LlmMode llmMode,
@@ -9,11 +12,17 @@ public record ApplicationConfig(
         String openAiResponsesEndpoint
 ) {
 
+    /**
+     * App mode decides whether the project runs the demo or the local server.
+     */
     public enum ApplicationMode {
         DEMO,
         SERVER
     }
 
+    /**
+     * LLM mode decides whether to use the mock provider or OpenAI.
+     */
     public enum LlmMode {
         MOCK,
         OPENAI

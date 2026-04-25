@@ -15,11 +15,20 @@ import org.example.service.PolicyRules;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This actor applies policy rules after risk and history are ready.
+ */
 public class PolicyActor extends AbstractBehavior<PolicyActor.Command> {
 
+    /**
+     * Every message sent to PolicyActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive the risk and history results to evaluate policy.
+     */
     public record EvaluatePolicy(
             RiskResult riskResult,
             HistoryResult historyResult,

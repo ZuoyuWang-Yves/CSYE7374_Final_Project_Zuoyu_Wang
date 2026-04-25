@@ -8,6 +8,9 @@ import org.example.model.Severity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Holds the policy checks used by PolicyActor.
+ */
 public class PolicyRules {
 
     public PolicyResult evaluate(RiskResult riskResult, HistoryResult historyResult) {

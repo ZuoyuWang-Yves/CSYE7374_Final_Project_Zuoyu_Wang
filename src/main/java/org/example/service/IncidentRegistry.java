@@ -9,6 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Keeps submitted incidents and completed results in memory for the UI.
+ */
 public class IncidentRegistry {
 
     private final Map<String, RawIncident> submittedIncidentsByEventId = new LinkedHashMap<>();

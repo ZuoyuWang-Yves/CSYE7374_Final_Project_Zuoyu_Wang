@@ -14,11 +14,20 @@ import org.example.service.HistoryService;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This actor looks at recent incident history and checks for repeated failure.
+ */
 public class HistoryActor extends AbstractBehavior<HistoryActor.Command> {
 
+    /**
+     * Every message sent to HistoryActor must implement Command.
+     */
     public interface Command {
     }
 
+    /**
+     * This actor can receive one incident and analyze its history.
+     */
     public record AnalyzeHistory(
             NormalizedIncident incident,
             ActorRef<HistoryResult> replyTo
